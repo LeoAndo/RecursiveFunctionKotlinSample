@@ -2,36 +2,25 @@ package com.template.recursivefunctionkotlinsample
 
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.ToggleButton
-import androidx.constraintlayout.widget.ConstraintLayout
 
 object ViewUtil {
-    private fun getViewsTree(view: View?, parentView: ViewGroup?): List<View> {
+    private fun getViewsTree(view: View?): List<View> {
         val views = mutableListOf<View>()
-        if (view is LinearLayout
-            || view is FrameLayout
-            || (view is RelativeLayout
-                    || view is ConstraintLayout)
-        ) {
-            val childNum = (view as ViewGroup).childCount
-            var count = childNum
+        if (view is ViewGroup) {
+            var count = view.childCount
             while (0 <= count) {
                 val child = view.getChildAt(count - 1)
-                views.addAll(getViewsTree(child, view as ViewGroup?))
+                views.addAll(getViewsTree(child))
                 count--
             }
         }
-        if (view != null) {
-            views.add(view)
-        }
+        view?.also { views.add(it) }
         return views
     }
 
     fun setOnClickListenerForToggleButton(vg: View, l: View.OnClickListener?) {
-        val viewTree = getViewsTree(vg, null)
+        val viewTree = getViewsTree(vg)
         viewTree.filterIsInstance<ToggleButton>().forEach { toggleButton ->
             toggleButton.setOnClickListener(l)
         }
