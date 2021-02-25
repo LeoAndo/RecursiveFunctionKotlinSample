@@ -9,7 +9,7 @@ import android.widget.ToggleButton
 import androidx.constraintlayout.widget.ConstraintLayout
 
 object ViewUtil {
-    private fun getViewsRecursive(view: View?, parentView: ViewGroup?): List<View> {
+    private fun getViewsTree(view: View?, parentView: ViewGroup?): List<View> {
         val views = mutableListOf<View>()
         if (view is LinearLayout
             || view is FrameLayout
@@ -20,7 +20,7 @@ object ViewUtil {
             var count = childNum
             while (0 <= count) {
                 val child = view.getChildAt(count - 1)
-                views.addAll(getViewsRecursive(child, view as ViewGroup?))
+                views.addAll(getViewsTree(child, view as ViewGroup?))
                 count--
             }
         }
@@ -31,7 +31,7 @@ object ViewUtil {
     }
 
     fun setOnClickListenerForToggleButton(vg: View, l: View.OnClickListener?) {
-        val viewTree = getViewsRecursive(vg, null)
+        val viewTree = getViewsTree(vg, null)
         viewTree.filterIsInstance<ToggleButton>().forEach { toggleButton ->
             toggleButton.setOnClickListener(l)
         }
