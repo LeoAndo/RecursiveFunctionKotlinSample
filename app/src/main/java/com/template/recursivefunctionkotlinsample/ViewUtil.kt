@@ -15,7 +15,7 @@ object ViewUtil {
                 count--
             }
         }
-        view?.also { views.add(it) }
+        view?.let { views.add(it) }
         return views
     }
 
